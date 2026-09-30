@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.1.0 (2026-09-30)
+
+- Themes, picked in the widget's settings (long-press the dashboard, Widget settings, Theme):
+  - **Glass Cockpit**, the new default: avionics style, near-black with thin rules, segmented gauges, a plan view with range rings for the GPS view and link lost.
+  - **Hi-Vis**: fluorescent yellow for bright sun, giant condensed numbers, hatched level gauges, hazard stripes when armed, and a red-orange screen in a failsafe or when the link is lost.
+  - **Classic**: the 1.0 look.
+- A separate **link lost** screen when the signal drops while armed; the **flight summary** is for a quad that landed and was unplugged.
+- Switch tiles show what a position means; channels named ARM, BEEPER, TURTLE, RESCUE and the like read OFF/ON without a `config.lua`.
+- New setting `tabularDigits` for Hi-Vis.
+- `tools/sprites.py` renders the theme images.
+
 ## 1.0.0 (2026-09-30)
 
 First release.

@@ -1,38 +1,64 @@
 # FPVDash
 
-A full-screen telemetry dashboard for EdgeTX colour radios, for Betaflight quads on ExpressLRS or Crossfire. Everything you need before, during and after a flight on one screen, with a find-my-quad QR code, a logbook and optional voice callouts.
+A full-screen telemetry dashboard for EdgeTX colour radios, for Betaflight quads on ExpressLRS or Crossfire. Everything you need before, during and after a flight on one screen, with a find-my-quad QR code, a logbook and optional voice callouts. Three themes to pick from.
 
-![Dashboard](docs/dashboard.png)
+![Glass Cockpit and Hi-Vis on a RadioMaster TX16S MK3](docs/themes-tx16s-mk3.jpg)
+
+<sub>Radio photo: RadioMaster. The screens are rendered from the widget's code.</sub>
+
+## Themes
+
+Pick one in the widget's settings: long-press the dashboard, choose **Widget settings**, then **Theme**. The change shows at once, and each model keeps its own choice.
+
+| Glass Cockpit | Hi-Vis | Classic |
+|---|---|---|
+| ![Glass Cockpit](docs/cockpit-dashboard.png) | ![Hi-Vis](docs/hivis-dashboard.png) | ![Classic](docs/classic-dashboard.png) |
+| Avionics style: near-black, thin rules, colour only where it means something (cyan for your switch settings, amber for caution, red for warnings, magenta for home). The default. | Safety signage for bright sun: fluorescent yellow, giant condensed numbers, hazard stripes when armed, and the whole screen turns red-orange in a failsafe or when the link is lost. | The original look: rounded tiles and ring gauges in green, amber and red. |
 
 ## Features
 
 - **Dashboard**: battery (volts per cell, cell count detected automatically) and link quality gauges, flight mode, arm state, GPS satellites, flight timer, distance and arrow home, altitude, speed and mAh used.
-- **Arm state that explains itself**: READY, CAN'T ARM or NO RESCUE while disarmed, and NO HOME in red if you arm before Betaflight can set a GPS Rescue home point.
-- **Switch strip** across the top: every switch and knob that drives a channel, with the channel's name and its live position. Built from your model automatically, or with your own labels.
-- **Radio battery** in the bottom right corner of every screen.
-- **GPS view**, **flight summary** and **link lost** screens with a compass needle from home to the quad.
+- **Arm state that explains itself**: CAN'T ARM or NO RESCUE while disarmed, and NO HOME if you arm before Betaflight can set a GPS Rescue home point.
+- **Switch strip**: every switch and knob that drives a channel, showing what it does (OFF, ANGLE, ARMED...) rather than where it sits. Built from your model automatically, or with your own labels.
+- **Radio battery** on every screen.
+- **GPS view** while flying, and a **link lost** screen with the last known position when the signal drops in the air.
+- **Flight summary** after landing.
 - **Find my quad**: the last known position as a QR code. Scan it with your phone and the map opens at the spot. It survives a radio restart.
-- **Logbook**: flights and hours per quad and the latest flights. Bench tests with the props off aren't counted.
+- **Logbook**: flights and time per quad and the latest flights. Bench tests with the props off aren't counted.
 - **Simulator mode** for models used as a USB joystick.
 - Optional **voice callouts** (GPS ready, no home point, too high, distance every 100 m, battery 50/70/80% used, pack not charged, status readout) and **RGB LED** effects on radios that have them.
 
 ## Screens
 
-Every page, rendered from the widget code at 800x480.
+Every page in the two newest themes, rendered from the widget code at 800x480.
 
-| | |
-|---|---|
-| ![Waiting](docs/waiting.png) **Waiting.** Before a quad links. The switch strip is already live, so you can check every switch before plugging in. | ![Dashboard](docs/dashboard.png) **Dashboard.** Armed and flying: pack and link gauges, mode, satellites, timer, and home distance with an arrow pointing home. |
-| ![On the bench](docs/bench.png) **On the bench.** Disarmed; the chip says why it isn't ready. Here NO RESCUE: too few satellites for a GPS Rescue home point yet. | ![Armed without a home point](docs/no-home.png) **No home point.** Armed with 6 satellites, so Betaflight set no rescue home: NO HOME in red. |
-| ![Warnings](docs/warnings.png) **Warnings.** Failsafe, a sagging pack, a weak link and a low radio battery, all in red. | ![GPS view](docs/gps-view.png) **GPS view.** Press the view switch while flying: compass needle from home, live position, altitude, speed, heading. |
-| ![Flight summary](docs/summary.png) **Flight summary.** After landing: last position, distance and direction from home, max distance, altitude, speed, lowest cell, mAh, flight time. | ![Link lost](docs/link-lost.png) **Link lost.** When the signal drops in the air: where the quad was last seen and how long ago. |
-| ![Find my quad](docs/find.png) **Find my quad.** The last known position as a QR code for your phone's map. | ![Logbook](docs/logbook.png) **Logbook.** Flights and hours per quad, and the latest flights. |
-| ![Simulator mode](docs/simulator.png) **Simulator mode.** When the model has no RF module switched on. | ![Custom switch strip](docs/custom-strip.png) **Your own switch labels.** Named positions from `config.lua`; live states tint the tile. |
-| ![Small screen](docs/small-screen.png) **Smaller screens.** The same dashboard scaled to 480x272 (TX16S MKII and similar). | |
+| | Glass Cockpit | Hi-Vis |
+|---|---|---|
+| **Waiting.** Before a quad links. The switch strip is already live, so you can check every switch before plugging in. | ![](docs/cockpit-waiting.png) | ![](docs/hivis-waiting.png) |
+| **On the bench.** Disarmed; the annunciators say why it isn't ready. Here NO RESCUE: too few satellites for a GPS Rescue home point yet. | ![](docs/cockpit-bench.png) | ![](docs/hivis-bench.png) |
+| **Flying.** Pack and link gauges, mode, satellites, timer, and home distance with an arrow pointing home. | ![](docs/cockpit-dashboard.png) | ![](docs/hivis-dashboard.png) |
+| **No home point.** Armed with 6 satellites, so Betaflight set no rescue home. | ![](docs/cockpit-no-home.png) | ![](docs/hivis-no-home.png) |
+| **Failsafe.** A sagging pack, a weak link, no GPS fix and a low radio battery. | ![](docs/cockpit-failsafe.png) | ![](docs/hivis-failsafe.png) |
+| **GPS view.** Press the view switch while flying: where the quad is from home, the position and the numbers that matter. | ![](docs/cockpit-gps-view.png) | ![](docs/hivis-gps-view.png) |
+| **Link lost.** When the signal drops in the air: where the quad was last seen and how long ago. | ![](docs/cockpit-link-lost.png) | ![](docs/hivis-link-lost.png) |
+| **Flight summary.** After landing and unplugging: flight time, lowest cell, mAh, distance, altitude, speed, and where it landed. | ![](docs/cockpit-summary.png) | ![](docs/hivis-summary.png) |
+| **Find my quad.** The last known position as a QR code for your phone's map. | ![](docs/cockpit-find.png) | ![](docs/hivis-find.png) |
+| **Logbook.** Flights and time per quad, and the latest flights. | ![](docs/cockpit-logbook.png) | ![](docs/hivis-logbook.png) |
+| **Simulator mode.** When the model has no RF module switched on. | ![](docs/cockpit-simulator.png) | ![](docs/hivis-simulator.png) |
+
+Classic has the same pages:
+
+| | | |
+|---|---|---|
+| ![](docs/classic-gps-view.png) | ![](docs/classic-link-lost.png) | ![](docs/classic-find.png) |
+
+On 480x272 screens (TX16S MKII and similar) everything scales down:
+
+![Glass Cockpit at 480x272](docs/cockpit-small-screen.png)
 
 ## Requirements
 
-- EdgeTX 2.11 or later on a colour-screen radio. Designed at 800x480 (RadioMaster TX16S MK3) and scales to 480x272.
+- EdgeTX 2.11 or later on a colour-screen radio. Designed at 800x480 (RadioMaster TX16S MK3) and scales to 480x272. Tested on EdgeTX 2.12.
 - Betaflight with ExpressLRS or Crossfire telemetry. Tested with Betaflight 4.5, 2025.12 and 2026.6 on ExpressLRS 4.1.
 
 ## Install
@@ -54,7 +80,7 @@ In the model's **Special Functions**, add: switch **ON**, function **RGB LEDs**,
 ## Using it
 
 - The **view switch** (SH by default, a momentary switch) steps through the pages: dashboard and GPS view while linked; otherwise the home screen, Find and Logbook.
-- The widget's **Cells** option forces a cell count; 0 detects it from the pack voltage.
+- Long-press the dashboard and choose **Widget settings** for the **Theme** and **Cells** options. Cells forces a cell count; 0 detects it from the pack voltage. The same settings are in the screen setup: pick the widget, then Settings.
 
 ## Settings
 
@@ -65,6 +91,7 @@ Copy `WIDGETS/FPVDash/config.example.lua` to `config.lua` in the same folder on 
 - `homeSats`: Betaflight's `gps_rescue_min_sats` (default 8).
 - `viewSwitch`: the page switch (default `"sh"`).
 - `switches`: your own switch strip with named positions (ANGLE, HORIZON, ACRO...), instead of the automatic one.
+- `tabularDigits`: in Hi-Vis, gives every digit the same width so numbers hold still as they change, at the cost of looser spacing around the 1s (default off; Glass Cockpit's digits always are).
 - `ceiling`, `charged`, `packs`, `statusSwitch`: for the voice callouts.
 
 Restart the radio (or reselect the model) after changing it.
@@ -75,15 +102,27 @@ In `/LOGS` on the SD card: `fpvdash-lastpos.txt` (a line per link loss or landin
 
 ## Upgrading
 
-Unzip the new version over the old one. Your `config.lua` and logbook are kept, because the zip doesn't contain them. If the radio still shows the old version, delete `WIDGETS/FPVDash/main.luac` so EdgeTX recompiles it.
+Unzip the new version over the old one. Your `config.lua` and logbook are kept, because the zip doesn't contain them. If the radio still shows the old version, delete the `.luac` files in `WIDGETS/FPVDash` and `WIDGETS/FPVDash/themes` so EdgeTX recompiles them.
+
+Coming from 1.0: the dashboard opens in Glass Cockpit. Choose Classic in the widget's settings for the old look.
 
 ## Uninstalling
 
 Delete `WIDGETS/FPVDash`, `SCRIPTS/FUNCTIONS/fpvcall.lua`, `SCRIPTS/RGBLED/fpvleds.lua`, `SOUNDS/en/fpvdash` and, if you like, the `fpvdash-*` files in `/LOGS`.
 
+## How the themes are drawn
+
+EdgeTX widgets can only use the radio's built-in fonts, so the large numbers and display words of Glass Cockpit and Hi-Vis are pre-rendered images in `WIDGETS/FPVDash/img`: one sheet per font size, each character in a cell, one band per colour. The widget shows a character by placing its sheet in a clipping box one cell wide, so a screen opens only a few image files. Labels and small text use the radio's fonts.
+
 ## Making a release
 
 The files that go on the SD card are in [`src/`](src/). To release a new version, bump `VERSION` in `src/WIDGETS/FPVDash/main.lua`, add it to [CHANGELOG.md](CHANGELOG.md) and run `python3 build.py`, which writes `dist/FPVDash-<version>.zip`.
+
+The theme images come from `python3 tools/sprites.py` (needs Pillow, fontTools and brotli). It downloads the typefaces from Google Fonts the first time.
+
+## Credits
+
+The themes are set in [IBM Plex Mono](https://fonts.google.com/specimen/IBM+Plex+Mono), [Barlow Semi Condensed](https://fonts.google.com/specimen/Barlow+Semi+Condensed), [Big Shoulders Display](https://fonts.google.com/specimen/Big+Shoulders+Display) and [JetBrains Mono](https://fonts.google.com/specimen/JetBrains+Mono), all under the SIL Open Font License. Only rendered images of them are included.
 
 ## License
 

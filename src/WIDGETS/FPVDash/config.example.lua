@@ -1,6 +1,7 @@
 -- FPVDash settings. Copy this file to config.lua in the same folder and edit it; anything you
 -- leave out keeps its default. The dashboard, the callout script and the LED script all read it.
 -- Restart the radio (or reselect the model) after changing it.
+-- The theme isn't set here: long-press the dashboard, Widget settings, Theme.
 return {
   -- Pack sizes you fly, for detecting the cell count from the voltage. Their 3.0-4.4 V per
   -- cell ranges must not overlap: 4 and 6 are fine, 3 and 4 aren't.
@@ -23,16 +24,21 @@ return {
   --   { switch, function, up, middle, down }     3-position switch
   --   { knob, function, pot = true }             shows the knob's level
   --   { switch, function, view = true }          the page switch
-  -- A position ending in ! tints the tile amber while it's selected, !! red.
+  -- The first position is the switch's home; the themes show the others as set by you. A
+  -- position ending in ! reads as a caution (amber), !! as armed (red).
   -- switches = {
-  --   { "SF", "ARM", "SAFE", "ARMED!!" },
+  --   { "SF", "ARM", "OFF", "ARMED!!" },
   --   { "SB", "MODE", "ANGLE", "HORIZON", "ACRO" },
-  --   { "SC", "BEEPER", "OFF", "OFF", "ON!" },
-  --   { "SD", "TURTLE", "OFF", "OFF", "ON!" },
+  --   { "SC", "BEEPER", "OFF", "OFF", "ON" },
+  --   { "SD", "TURTLE", "OFF", "OFF", "ON" },
   --   { "SG", "RESCUE", "OFF", "OFF", "ON!" },
   --   { "S1", "VOLUME", pot = true },
   --   { "SH", "VIEW", view = true },
   -- },
+
+  -- Hi-Vis: give every digit the same width so numbers hold still as they change. Big Shoulders
+  -- has no evenly spaced digits of its own, so this spaces out the 1s. Glass Cockpit's always are.
+  tabularDigits = false,
 
   -- Voice callouts (SCRIPTS/FUNCTIONS/fpvcall.lua) --------------------------------------------
 
