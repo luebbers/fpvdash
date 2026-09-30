@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.1 (2026-09-30)
+
+- **Hi-Vis** no longer stops with "Invalid property 'dashWidth'" on the radio. EdgeTX 2.12 only draws dashes on horizontal and vertical line objects, so the dashed LAND line is now one.
+- **Hi-Vis** on 480x272 screens: smaller battery digits, so they stay clear of the labels above them and the V fits in its cell.
+
 ## 1.1.0 (2026-09-30)
 
 - Themes, picked in the widget's settings (long-press the dashboard, Widget settings, Theme):

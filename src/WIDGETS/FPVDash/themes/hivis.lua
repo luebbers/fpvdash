@@ -191,8 +191,8 @@ local function build(w)
     local tagX = batW - P(12) - tagW
     local tagY = landY + P(3)
     add(list, {
-      { type = "line", color = C.ink, thickness = max(1, P(2)), dashWidth = P(6), dashGap = P(4),
-        pts = { { 0, landY }, { batW, landY } } },
+      -- EdgeTX 2.12 dashes hline and vline only; a plain line rejects dashWidth and dashGap
+      { type = "hline", x = 0, y = landY, w = batW, h = max(1, P(2)), color = C.ink, dashWidth = P(6), dashGap = P(4) },
       rect(tagX, tagY, tagW, tagH, C.ink),
       { type = "label", x = tagX, y = tagY + floor((tagH - textH(TINSIZE)) / 2 + 0.5), w = tagW,
         align = CENTER, font = TINSIZE, text = "LAND 3.5", color = ground },

@@ -106,6 +106,9 @@ THEMES = {
             "nohome":   ("Big Shoulders Display", 900, 52, -0.01, "NO HOME", "y"),
             "nohome_r": ("Big Shoulders Display", 900, 52, -0.01, "NO HOME", "red"),
         },
+        # px on the small screens, where EdgeTX's label fonts shrink less than the layout: at 60% the
+        # battery digits would reach the labels above them
+        "small": {"bat": 128},
     },
 }
 SCALES = {"100": 1.0, "60": 0.6}
@@ -189,9 +192,9 @@ def tabular(path):
 
 # rendering ------------------------------------------------------------------------------------
 
-def sheet(name, spec, colors, scale, folder, outdir, sdir, dash):
-    family, weight, px, chars, bands = spec
-    px = max(MIN_PX, int(round(px * scale)))
+def sheet(name, spec, colors, scale, folder, outdir, sdir, dash, px=None):
+    family, weight, size, chars, bands = spec
+    px = px or max(MIN_PX, int(round(size * scale)))
     font = ImageFont.truetype(font_path(family, weight, folder), px)
     chars = " " + chars                              # cell 1 is blank
     glyph = {c: (dash if c == "~" else c) for c in chars}
@@ -374,7 +377,8 @@ def main():
             for old in os.listdir(outdir):
                 os.remove(os.path.join(outdir, old))
             sdir = "%s/%s/%s" % (SD, theme, tag)
-            meta = {name: sheet(name, spec, t["colors"], scale, args.fonts, outdir, sdir, t["dash"])
+            small = t.get("small", {}) if scale < 1 else {}
+            meta = {name: sheet(name, spec, t["colors"], scale, args.fonts, outdir, sdir, t["dash"], small.get(name))
                     for name, spec in t["fonts"].items()}
             meta["words"] = {name: word(name, spec, t["colors"], scale, args.fonts, outdir, sdir)
                              for name, spec in t["words"].items()}
