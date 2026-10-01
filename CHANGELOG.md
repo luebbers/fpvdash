@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.2 (2026-09-30)
+
+- **Glass Cockpit**: opening the GPS view or the link lost screen without a GPS position no longer restarts the radio into Emergency mode. EdgeTX 2.12.4 crashes when a line whose points come from a function is hidden before it has points, which the plan view's line home and lost marker did; they're shown and hidden through their container now. Update if you use Glass Cockpit, the default.
+- New setting `debugLog`: writes a line to `/LOGS/fpvdash-debug.txt` at every page build and switch, so the last line before a crash shows what the dashboard was doing.
+
 ## 1.1.1 (2026-09-30)
 
 - **Hi-Vis** no longer stops with "Invalid property 'dashWidth'" on the radio. EdgeTX 2.12 only draws dashes on horizontal and vertical line objects, so the dashed LAND line is now one.

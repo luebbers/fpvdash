@@ -40,6 +40,10 @@ return {
   -- has no evenly spaced digits of its own, so this spaces out the 1s. Glass Cockpit's always are.
   tabularDigits = false,
 
+  -- Write a line to /LOGS/fpvdash-debug.txt at every page build and switch. If the radio ever
+  -- restarts into Emergency mode, the last line shows what the dashboard was doing.
+  debugLog = false,
+
   -- Voice callouts (SCRIPTS/FUNCTIONS/fpvcall.lua) --------------------------------------------
 
   -- "Too high" with the altitude, every 6 s above this many metres over takeoff.

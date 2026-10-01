@@ -278,44 +278,54 @@ local function build(w)
       lab(cx + P(4), cy - R + P(14), TINSIZE, function() return pv.outer end, C.dim),
       lab(cx + P(4), cy - r2 - P(5), TINSIZE, function() return pv.inner end, C.dim),
     })
+    -- EdgeTX 2.12.4 crashes (Emergency mode) when a line whose points come from a function is
+    -- hidden before its first points: lines here have no visible function, and the boxes that
+    -- hold them show and hide them instead
+    local shown = function() return pv.qx ~= nil end
     -- the line home is dashed 4 on 4; LVGL dashes only level and upright lines, so the dashes
-    -- are separate segments
+    -- are separate segments, and the ones past the quad shrink to nothing
     local dash = max(2, P(4))
+    local segs = {}
     for i = 0, floor(R / (2 * dash)) do
       local a0, a1 = 2 * i * dash, 2 * i * dash + dash
-      list[#list + 1] = { type = "line", color = C.magenta, thickness = max(1, P(1.5)),
-        visible = function() return pv.qx ~= nil and a0 < pv.len end,
+      segs[#segs + 1] = { type = "line", color = C.magenta, thickness = max(1, P(1.5)),
         pts = function()
-          local e = min(a1, pv.len)
-          return { { floor(cx + pv.ux * a0 + 0.5), floor(cy + pv.uy * a0 + 0.5) },
+          local s, e = min(a0, pv.len), min(a1, pv.len)
+          return { { floor(cx + pv.ux * s + 0.5), floor(cy + pv.uy * s + 0.5) },
                    { floor(cx + pv.ux * e + 0.5), floor(cy + pv.uy * e + 0.5) } }
         end }
     end
     add(list, {
+      { type = "box", x = 0, y = 0, w = W, h = H, visible = shown, children = segs },
       { type = "circle", x = cx, y = cy, radius = P(7), filled = false, thickness = max(1, P(2)), color = C.magenta },
       { type = "circle", x = cx, y = cy, radius = max(1, P(2)), filled = true, color = C.magenta },
     })
+    local marker
     if lost then
-      local r = P(11)
-      add(list, {
+      local r, s = P(11), P(5)
+      local function qx() return pv.qx or cx end
+      local function qy() return pv.qy or cy end
+      marker = {
         { type = "circle", x = cx, y = cy, radius = r, filled = false, thickness = max(1, P(2)), color = C.red,
-          visible = function() return pv.qx ~= nil end, pos = function() return pv.qx, pv.qy end },
-        { type = "line", color = C.red, thickness = max(1, P(2)), visible = function() return pv.qx ~= nil end,
-          pts = function() return { { pv.qx - P(5), pv.qy - P(5) }, { pv.qx + P(5), pv.qy + P(5) } } end },
-        { type = "line", color = C.red, thickness = max(1, P(2)), visible = function() return pv.qx ~= nil end,
-          pts = function() return { { pv.qx + P(5), pv.qy - P(5) }, { pv.qx - P(5), pv.qy + P(5) } } end },
-      })
+          pos = function() return qx(), qy() end },
+        { type = "line", color = C.red, thickness = max(1, P(2)),
+          pts = function() return { { qx() - s, qy() - s }, { qx() + s, qy() + s } } end },
+        { type = "line", color = C.red, thickness = max(1, P(2)),
+          pts = function() return { { qx() + s, qy() - s }, { qx() - s, qy() + s } } end },
+      }
     else
       local u = k
       local shape = { { 0, -12 * u }, { 8 * u, 9 * u }, { 0, 4.5 * u }, { -8 * u, 9 * u } }
+      marker = {}
       for _, tri in ipairs({ { 1, 2, 3 }, { 1, 3, 4 } }) do
-        list[#list + 1] = { type = "triangle", color = C.fg, visible = function() return pv.qx ~= nil end,
+        marker[#marker + 1] = { type = "triangle", color = C.fg,
           pts = function()
-            local p = K.turn(pv.qx, pv.qy, pv.hdg or 0, shape)
+            local p = K.turn(pv.qx or cx, pv.qy or cy, pv.hdg or 0, shape)
             return { p[tri[1]], p[tri[2]], p[tri[3]] }
           end }
       end
     end
+    list[#list + 1] = { type = "box", x = 0, y = 0, w = W, h = H, visible = shown, children = marker }
     return pv
   end
   local rx, rRight = P(368), W - P(28)

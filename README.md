@@ -92,6 +92,7 @@ Copy `WIDGETS/FPVDash/config.example.lua` to `config.lua` in the same folder on 
 - `viewSwitch`: the page switch (default `"sh"`).
 - `switches`: your own switch strip with named positions (ANGLE, HORIZON, ACRO...), instead of the automatic one.
 - `tabularDigits`: in Hi-Vis, gives every digit the same width so numbers hold still as they change, at the cost of looser spacing around the 1s (default off; Glass Cockpit's digits always are).
+- `debugLog`: writes a line to `/LOGS/fpvdash-debug.txt` at every page build and switch (default off). If the radio restarts into Emergency mode, the last line shows what the dashboard was doing; please include the file in a bug report.
 - `ceiling`, `charged`, `packs`, `statusSwitch`: for the voice callouts.
 
 Restart the radio (or reselect the model) after changing it.

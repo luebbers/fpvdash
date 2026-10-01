@@ -12,7 +12,7 @@
 -- otherwise the screen above, then Find (last saved position as a QR code for a phone's map)
 -- and Logbook.
 
-local VERSION = "1.1.1"
+local VERSION = "1.1.2"
 local DIR = "/WIDGETS/FPVDash/"
 
 -- the Theme setting's choices in the order EdgeTX stores them (1-based); add new ones at the end
@@ -30,6 +30,7 @@ local CONFIG = {
   viewSwitch = "sh",       -- momentary switch that steps through the pages; false for none
   switches = nil,          -- switch strip; nil builds it from the model's mixer
   tabularDigits = false,   -- Hi-Vis: every digit the same width, so numbers hold still as they change
+  debugLog = false,        -- writes /LOGS/fpvdash-debug.txt: page builds and switches, for crash reports
 }
 do
   local chunk = loadScript(DIR .. "config.lua")
@@ -51,6 +52,17 @@ local PACK_CELLS   = CONFIG.cells
 local VIEW_SWITCH  = CONFIG.viewSwitch or nil
 local floor, max, min = math.floor, math.max, math.min
 local atan2 = math.atan2 or function(y, x) return math.atan(y, x) end
+
+-- the file is closed after every line so the last one survives a radio crash
+local DEBUG_PATH = "/LOGS/fpvdash-debug.txt"
+local function crumb(msg)
+  if not CONFIG.debugLog then return end
+  local f = io.open(DEBUG_PATH, "a")
+  if not f then return end
+  local free = getAvailableMemory and getAvailableMemory() or -1024
+  io.write(f, string.format("%d %s lua=%dK free=%dK\n", getTime(), msg, floor(collectgarbage("count")), floor(free / 1024)))
+  io.close(f)
+end
 
 -- Geo & formatting --------------------------------------------------------------
 local function distance(a, b)
@@ -714,10 +726,12 @@ local function showPage(w, screen)
   local make, box = w.lazy and w.lazy[name], w.refs and w.refs[name]
   if not (make and box) then return false end
   w.lazy[name] = nil
+  crumb("build " .. name)
   local refs = box:build(make())
   if refs then
     for k, r in pairs(refs) do w.refs[k] = r end
   end
+  crumb("built " .. name)
   return true
 end
 
@@ -728,12 +742,14 @@ local function create(zone, opts)
   reset(w)
   loadLastPos(w)
   loadBook(w)
+  crumb("create " .. VERSION)
   return w
 end
 
 local function update(w, opts)
   w.options = opts
   loadTheme(w)
+  crumb("update " .. tostring(w.themeId))
   buildSwitches(w)
   K.switches = SWITCHES
   w.sim = isSim()
@@ -745,6 +761,7 @@ local function update(w, opts)
   end
   local ok, err = pcall(w.theme.build, w)
   if not ok then showError(w, err) end
+  crumb(ok and "update done" or ("update error " .. tostring(err)))
 end
 
 local function refresh(w)
@@ -753,6 +770,15 @@ local function refresh(w)
   local d = track(w)
   derive(w, d)
   w.d = d
+  if CONFIG.debugLog then
+    if d.screen ~= w.dbgScreen then
+      crumb("screen " .. tostring(w.dbgScreen) .. " > " .. d.screen)
+      w.dbgScreen, w.dbgFrames = d.screen, 3
+    elseif (w.dbgFrames or 0) > 0 then
+      crumb("frame " .. (4 - w.dbgFrames) .. " " .. d.screen)
+      w.dbgFrames = w.dbgFrames - 1
+    end
+  end
   if not (w.theme and w.refs) then return end
   -- a page built in this call appears in the next one, filled in: building and showing it in
   -- the same call would come close to the instruction limit
